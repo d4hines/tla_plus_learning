@@ -2,27 +2,26 @@
 <launchConfiguration type="org.lamport.tla.toolbox.tool.tlc.modelCheck">
     <stringAttribute key="configurationName" value="Model_1"/>
     <intAttribute key="distributedFPSetCount" value="0"/>
-    <stringAttribute key="distributedNetworkInterface" value="192.168.0.43"/>
+    <stringAttribute key="distributedNetworkInterface" value="172.17.0.1"/>
     <intAttribute key="distributedNodesCount" value="1"/>
     <stringAttribute key="distributedTLC" value="off"/>
-    <intAttribute key="fpIndex" value="41"/>
+    <intAttribute key="fpIndex" value="108"/>
     <intAttribute key="maxHeapSize" value="25"/>
     <stringAttribute key="modelBehaviorInit" value=""/>
     <stringAttribute key="modelBehaviorNext" value=""/>
-    <stringAttribute key="modelBehaviorSpec" value="Spec"/>
-    <intAttribute key="modelBehaviorSpecType" value="1"/>
-    <stringAttribute key="modelBehaviorVars" value="lockedValue, lockedRound, validValue, validRound, decision, step, round, good_nodes, pc, bad_nodes, height, nodes"/>
+    <stringAttribute key="modelBehaviorSpec" value=""/>
+    <intAttribute key="modelBehaviorSpecType" value="0"/>
+    <stringAttribute key="modelBehaviorVars" value=""/>
     <stringAttribute key="modelComments" value=""/>
     <booleanAttribute key="modelCorrectnessCheckDeadlock" value="true"/>
-    <listAttribute key="modelCorrectnessInvariants">
-        <listEntry value="1DummyInvariant"/>
-    </listAttribute>
-    <listAttribute key="modelCorrectnessProperties">
-        <listEntry value="0Termination"/>
-    </listAttribute>
+    <listAttribute key="modelCorrectnessInvariants"/>
+    <listAttribute key="modelCorrectnessProperties"/>
     <intAttribute key="modelEditorOpenTabs" value="8"/>
-    <stringAttribute key="modelExpressionEval" value=""/>
+    <stringAttribute key="modelExpressionEval" value="foo"/>
     <listAttribute key="modelParameterConstants"/>
+    <listAttribute key="modelParameterDefinitions">
+        <listEntry value="Null_int;;Null_int;1;0"/>
+    </listAttribute>
     <intAttribute key="modelVersion" value="20191005"/>
     <intAttribute key="numberOfWorkers" value="12"/>
     <stringAttribute key="result.mail.address" value=""/>

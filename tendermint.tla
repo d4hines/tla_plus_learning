@@ -1,65 +1,55 @@
-
-
-
 ----------------------------- MODULE tendermint -----------------------------
-
------------ MODULE IMod -----------
-
-CONSTANT x, y
-
-====================================
------------------------------------------------------------------------------
-
-EXTENDS Naturals, Integers, Sequences, IMod
+EXTENDS Naturals, Integers
 
 (*--algorithm tendermint
 
 variables
-  Height = 1..100;
-  Round = 1..100;
-  Values = {"value1", "value2", "value3"};
-  good_nodes = 1..1;
-  \*bad_nodes = {4};
-  Nodes = good_nodes; \* \cup bad_nodes
-  proposer = [Height \X Round -> Nodes];
-  getValue = [Height -> Values];
+ Values = { "a", "b", "c" };
+ processes = 1..3;
+ proposer \in [ Nat \X Nat -> processes ];  
 define
+nil_value == CHOOSE x : x \notin Values
+
 end define
 
-procedure StartRound(p, round)
-variables proposal
+procedure StartRound(p, r)
+variable proposal
 begin
   StartRound:
-    round_p := round;
-    step_p := "propose";
-    if proposer[<<height_p, round_p>>] == p then
-      proposal := validValue_p
+    round[p] := r;
+    step[p] := "propose";
+    if proposer[<<h[p], round[p]>>] = p then
+      if validValue[p] /= nil_value then
+        proposal := validValue[p];
+      else
+        proposal :=  CHOOSE x \in Values : TRUE
+      end if
     else
-      proposal := getValue()
-    end
-end procedure;
+      skip;
+    end if
+end procedure
 
-process p \in Nodes
+\* TODO: verify we have the correct notion of fairness
+fair+ process p \in processes
   variables
-    height_p = 0;
-    round_p = 0;
-    step_p \in {"propose", "prevote", "precommit"};
-    decision_p = <<>>;
-    lockedValue_p = "nil";
-    lockedRound_p = -1;
-    validValue_p = "nil";
-    validRound_p = -1;
+    h = 0;
+    round = 0;
+    step \in { "propose", "prevote", "precommit"};
+    decision = nil_value;
+    lockedValue = nil_value;
+    lockedRound = -1;
+    validValue = nil_value;
+    validRound = -1;
 begin
-  
-  HandleMessage:
-    call StartRound(p, height_p);
+  Start:
+    skip;
 end process
-
 end algorithm;*)
+
 
 
 =============================================================================
 
 \* Modification History
-\* Last modified Thu Dec 16 11:28:50 EST 2021 by d4hines
+\* Last modified Fri Dec 17 12:35:11 EST 2021 by d4hines
 \* Created Wed Dec 15 10:35:08 EST 2021 by d4hines 
