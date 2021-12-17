@@ -1,5 +1,4 @@
------------------------------ MODULE tendermint -----------------------------
-EXTENDS Naturals, Integers, Sequences
+----------------------------- MODULE await_test -----------------------------
 
 (*--algorithm tendermint
 
@@ -62,12 +61,12 @@ begin
     skip;
 end process
 end algorithm;*)
-\* BEGIN TRANSLATION (chksum(pcal) = "fd8b786e" /\ chksum(tla) = "33e8ef8")
-\* Label Broadcast of procedure Broadcast at line 22 col 5 changed to Broadcast_
-\* Label StartRound of procedure StartRound at line 33 col 9 changed to StartRound_
-\* Process p at line 49 col 7 changed to p_
-\* Process variable h of process p at line 51 col 5 changed to h_
-\* Procedure variable p of procedure Broadcast at line 19 col 3 changed to p_B
+\* BEGIN TRANSLATION (chksum(pcal) = "fd8b786e" /\ chksum(tla) = "7e31c8f6")
+\* Label Broadcast of procedure Broadcast at line 21 col 5 changed to Broadcast_
+\* Label StartRound of procedure StartRound at line 32 col 9 changed to StartRound_
+\* Process p at line 48 col 7 changed to p_
+\* Process variable h of process p at line 50 col 5 changed to h_
+\* Procedure variable p of procedure Broadcast at line 18 col 3 changed to p_B
 CONSTANT defaultInitValue
 VARIABLES Values, processes, proposer, pc, stack
 
@@ -198,10 +197,7 @@ Termination == <>(\A self \in ProcSet: pc[self] = "Done")
 
 \* END TRANSLATION 
 
-
-
 =============================================================================
-
 \* Modification History
-\* Last modified Fri Dec 17 13:14:24 EST 2021 by d4hines
-\* Created Wed Dec 15 10:35:08 EST 2021 by d4hines 
+\* Last modified Fri Dec 17 13:23:28 EST 2021 by d4hines
+\* Created Fri Dec 17 13:22:36 EST 2021 by d4hines
