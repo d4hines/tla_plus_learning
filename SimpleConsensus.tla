@@ -3,12 +3,15 @@
 EXTENDS Naturals, Integers, Sequences, FiniteSets, Helpers
 ----------------------------------------------------------------------------------------
 
-CONSTANTS good_nodes, bad_nodes, NULL
+CONSTANTS good_nodes, bad_nodes, NULL, initial_b
+
+
 
 (*--algorithm simpleconsensus
 
 variables
-  initial_value \in [ nodes -> BOOLEAN];
+  \* ========= 2 states
+  initial_value \in [ nodes -> initial_b];
   \* r : sender x receiver -> value
   \* A global map of values sent from sender to receiver in phase1
   r = [ pair \in nodes \X nodes |-> NULL ];
@@ -29,14 +32,10 @@ variables
   node_b = NULL;
 begin
   BroacastPhase1:
-  while remaining /= <<>> do
-    node_b := Head(remaining);
-    r[<<sender,node_b>>] := v;
-    remaining := Tail(remaining);
-  end while
+
 end procedure
 
-fair+ process p \in nodes
+fair process p \in nodes
   variables
     k = 1; \* round number
     d = initial_value[self]; \* Current value of bit for this node
@@ -46,6 +45,8 @@ begin
       \* "Broadcast" our value d by updating
       \* a global map
       call BroadcastPhase1(self, d);
+
+      \*r[<<self, self>>] := 
   \*Phase2:
     \*await ~(\E n \in nodes : r[n] = "nil");
     \*skip;
@@ -63,8 +64,8 @@ end process
 
 end algorithm;*)
 
-\* BEGIN TRANSLATION (chksum(pcal) = "f0697b4e" /\ chksum(tla) = "aeb88e21")
-\* Process variable remaining of process p at line 43 col 5 changed to remaining_
+\* BEGIN TRANSLATION (chksum(pcal) = "ad00122e" /\ chksum(tla) = "829e2398")
+\* Process variable remaining of process p at line 46 col 5 changed to remaining_
 CONSTANT defaultInitValue
 VARIABLES initial_value, r, m, pc, stack
 
@@ -81,7 +82,7 @@ vars == << initial_value, r, m, pc, stack, sender, v, remaining, node_b, k, d,
 ProcSet == (nodes)
 
 Init == (* Global variables *)
-        /\ initial_value \in [ nodes -> BOOLEAN]
+        /\ initial_value \in [ nodes -> initial_b]
         /\ r = [ pair \in nodes \X nodes |-> NULL ]
         /\ m = [ pair \in nodes \X nodes |-> NULL ]
         (* Procedure BroadcastPhase1 *)
@@ -112,7 +113,7 @@ BroadcastPhase1(self) == BroacastPhase1(self)
 Phase1(self) == /\ pc[self] = "Phase1"
                 /\ /\ sender' = [sender EXCEPT ![self] = self]
                    /\ stack' = [stack EXCEPT ![self] = << [ procedure |->  "BroadcastPhase1",
-                                                            pc        |->  "Phase2",
+                                                            pc        |->  "Done",
                                                             remaining |->  remaining[self],
                                                             node_b    |->  node_b[self],
                                                             sender    |->  sender[self],
@@ -124,13 +125,7 @@ Phase1(self) == /\ pc[self] = "Phase1"
                 /\ pc' = [pc EXCEPT ![self] = "BroacastPhase1"]
                 /\ UNCHANGED << initial_value, r, m, k, d, remaining_ >>
 
-Phase2(self) == /\ pc[self] = "Phase2"
-                /\ TRUE
-                /\ pc' = [pc EXCEPT ![self] = "Done"]
-                /\ UNCHANGED << initial_value, r, m, stack, sender, v, 
-                                remaining, node_b, k, d, remaining_ >>
-
-p(self) == Phase1(self) \/ Phase2(self)
+p(self) == Phase1(self)
 
 (* Allow infinite stuttering to prevent deadlock on termination. *)
 Terminating == /\ \A self \in ProcSet: pc[self] = "Done"
@@ -141,13 +136,17 @@ Next == (\E self \in ProcSet: BroadcastPhase1(self))
            \/ Terminating
 
 Spec == /\ Init /\ [][Next]_vars
-        /\ \A self \in nodes : SF_vars(p(self)) /\ SF_vars(BroadcastPhase1(self))
+        /\ \A self \in nodes : WF_vars(p(self)) /\ WF_vars(BroadcastPhase1(self))
 
 Termination == <>(\A self \in ProcSet: pc[self] = "Done")
 
 \* END TRANSLATION 
 
 ----------------------------
+(*
+init(_) -> phase1(_) -> terminating(_)
+
+*)
 \*  Consensus Properties
 
 Agree(b) == \A g \in good_nodes: d[g] = b
@@ -158,5 +157,5 @@ ValiditySpec == \A b \in BOOLEAN : Init /\ Agree(b) ~> []Agree(b)
 
 =============================================================================
 \* Modification History
-\* Last modified Tue Dec 21 11:08:54 EST 2021 by d4hines
+\* Last modified Tue Dec 21 13:51:53 EST 2021 by d4hines
 \* Created Thu Dec 16 14:59:47 EST 2021 by d4hines
