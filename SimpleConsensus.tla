@@ -46,14 +46,10 @@ begin
       \* "Broadcast" our value d by updating
       \* a global map
       call BroadcastPhase1(self, d);
-  Phase2:
+  \*Phase2:
     \*await ~(\E n \in nodes : r[n] = "nil");
-    skip;
-    
-
-    
+    \*skip;
   (*Phase2:
-    
     \*call BroadcastPhase2(self,Majority(r));
     d := CHOOSE b \in BOOLEAN : TRUE; 
   (*Finalize:
@@ -162,5 +158,5 @@ ValiditySpec == \A b \in BOOLEAN : Init /\ Agree(b) ~> []Agree(b)
 
 =============================================================================
 \* Modification History
-\* Last modified Fri Dec 17 17:09:33 EST 2021 by d4hines
+\* Last modified Tue Dec 21 11:08:54 EST 2021 by d4hines
 \* Created Thu Dec 16 14:59:47 EST 2021 by d4hines
